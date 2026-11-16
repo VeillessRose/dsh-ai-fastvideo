@@ -2,6 +2,13 @@
 
 遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号用语义化。
 
+## [0.3.2] - 2026-11-17
+
+### 变更
+
+- GitHub 账号改名 `rightnowrose` → `VeillessRose`：`package.json` 的 `repository` / `homepage` / `bugs`
+  与 README 的 `git clone` 地址同步更新到新地址（旧地址仍会被 GitHub 重定向，但不再长期依赖）。
+
 ## [0.3.1] - 2026-11-11
 
 ### 修复

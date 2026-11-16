@@ -15,7 +15,7 @@
 
 ```powershell
 # 方式零：从 GitHub 拿代码
-git clone https://github.com/rightnowrose/dsh-ai-fastvideo.git
+git clone https://github.com/VeillessRose/dsh-ai-fastvideo.git
 
 # 方式一：本地目录（开发 / 内网）
 #   plugin_manager install_bundle target=<本包目录>
