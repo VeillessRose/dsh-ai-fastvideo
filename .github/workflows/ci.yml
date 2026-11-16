@@ -19,6 +19,7 @@ jobs:
         run: |
           node --check index.js
           node --check client.js
+          node --check engine/node/render.mjs
           node -e "JSON.parse(require('fs').readFileSync('package.json','utf8'))"
 
       - uses: actions/setup-python@v5
@@ -30,14 +31,35 @@ jobs:
 
       - name: Package layout
         run: |
-          test -f cordis.patch.yml
-          test -f index.js
-          test -f client.js
-          test -f icon.svg
-          test -f locale/zh.json
-          test -f locale/en.json
-          test -f engine/python/videogen/__init__.py
-          test -f engine/python/tools/build_job.py
-          test -f engine/python/tools/render-cdp.ps1 || test -f engine/python/videogen/tools/render-cdp.ps1
-          test "$(ls assets/styles/*.md | wc -l)" -ge 1
+          set -e
+          for f in \
+            cordis.patch.yml index.js client.js icon.svg \
+            locale/zh.json locale/en.json \
+            engine/node/render.mjs \
+            engine/python/voice_server.py \
+            engine/python/videogen/__init__.py \
+            engine/python/videogen/paths.py \
+            engine/python/videogen/render.py \
+            engine/python/videogen/tools/build_job.py \
+            engine/python/videogen/tools/dump_catalog.py \
+            engine/python/videogen/templates/explain/index.html \
+            assets/styles/SOURCES.md \
+            LICENSE NOTICE.md README.md
+          do
+            test -f "$f" || { echo "缺少文件: $f"; exit 1; }
+          done
+          md=$(find assets/styles -mindepth 2 -name '*.md' | wc -l)
+          jpg=$(find assets/styles -mindepth 2 -name '*.jpg' | wc -l)
+          echo "styles: ${md} md / ${jpg} jpg"
+          test "$md" -ge 300 || { echo "风格库不完整（${md} 条）"; exit 1; }
           echo "layout ok"
+
+      - name: License notices
+        run: |
+          set -e
+          test -f assets/licenses/code-donghua_许可与来源.txt
+          test -f assets/licenses/Lemo-Opuscar_LICENSE.txt
+          test -f assets/licenses/mg-styles-15_LICENSE.txt
+          test -f assets/licenses/code-video_LICENSE.txt
+          grep -q "VeillessRose" package.json || { echo "package.json 里没有新仓库地址"; exit 1; }
+          echo "licenses ok"
